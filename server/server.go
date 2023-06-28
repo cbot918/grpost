@@ -14,7 +14,7 @@ func New(uiPath string) *App {
 	app := new(App)
 
 	app.Server = fiber.New()
-	app.Server.Use(cors.New())     // setup use cors
+	app.Server.Use(cors.New())     // setup allow cors *
 	app.Server.Static("/", uiPath) // serve spa
 	SetupRouting(app.Server)       // setup routing
 
