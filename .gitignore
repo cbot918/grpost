@@ -1,3 +1,4 @@
 source/
 build/
 grpost
+tool/.env

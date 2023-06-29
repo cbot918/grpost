@@ -11,8 +11,9 @@ build-ui:
 	npm --prefix ui run build 
 
 # database
+
 mig-init:
-	migrate create -ext sql -dir db/migrations -seq create_users_table
+	migrate create -ext sql -dir db/migrations -seq $(ARG)
 
 mig-up:
 	migrate -path db/migrations -database $(DB_URL) up
@@ -24,3 +25,6 @@ mig-down:
 
 .PHONY: run build-ui watch
 .SILENT: run build-ui watch
+
+test:
+	echo $(ARG)

@@ -13,6 +13,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const (
+	writeDest = "./users.json"
+)
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
@@ -23,7 +27,7 @@ func main() {
 	}
 
 	client := newMongo(uri)
-	col := client.Database("myFirstDatabase").Collection("posts")
+	col := client.Database("myFirstDatabase").Collection("users")
 	res := findAllFrom(col)
 
 	res0, err := bson.MarshalExtJSON(res[0], false, false)
@@ -31,19 +35,19 @@ func main() {
 		panic(err)
 	}
 
-	writeFileCover("posts.json", []byte("["))
-	writeContinue("posts.json", res0)
-	writeContinue("posts.json", []byte(","))
+	writeFileCover(writeDest, []byte("["))
+	writeContinue(writeDest, res0)
+	writeContinue(writeDest, []byte(","))
 	for _, item := range res {
 		jsonData, err := bson.MarshalExtJSON(item, false, false)
 		if err != nil {
 			fmt.Println("marshal bson to json failed")
 			panic(err)
 		}
-		writeContinue("posts.json", jsonData)
-		writeContinue("posts.json", []byte(","))
+		writeContinue(writeDest, jsonData)
+		writeContinue(writeDest, []byte(","))
 	}
-	writeContinue("posts.json", []byte("]"))
+	writeContinue(writeDest, []byte("]"))
 
 }
 
@@ -62,7 +66,7 @@ func findAllFrom(col *mongo.Collection) []bson.D {
 	}
 
 	// fmt.Println(results)
-	fJson(results)
+	printJson(results)
 	return results
 }
 
@@ -103,7 +107,7 @@ func findOneExample(col *mongo.Collection) {
 	fmt.Printf("%s\n", jsonData)
 }
 
-func fJson(target []bson.D) {
+func printJson(target []bson.D) {
 	jsonData, err := json.MarshalIndent(target, "", "    ")
 	if err != nil {
 		panic(err)
