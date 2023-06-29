@@ -1,3 +1,8 @@
-1. jwt impl (temp done)
+poc level
+1. jwt impl (v)
 2. db schema
-3. docker-compose.yml
+- migrate (v)
+- sqlc (v)
+- mockdb (hihi)
+3. docker-compose.yml (v)
+- db

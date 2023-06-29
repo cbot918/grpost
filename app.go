@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/cbot918/grpost/server"
+	"github.com/cbot918/grpost/server/mock"
 )
 
 const (
@@ -22,8 +23,9 @@ func NewConfig() *Config {
 
 func main() {
 
-	cfg := NewConfig()
+	mock.MockDb()
 
+	cfg := NewConfig()
 	grpost := server.New(cfg.StaticPath)
 
 	grpost.Server.Listen(cfg.PORT)
