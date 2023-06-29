@@ -50,7 +50,8 @@ func (a *Auth) Signin(c *fiber.Ctx) error {
 	target, err := a.query.GetUser(ctx, user.Email)
 	if err != nil {
 		fmt.Println("user not found")
-		return c.Status(http.StatusBadRequest).SendString("user not found")
+		return getErrorRes(c, err, "invalid email or password")
+		// return c.Status(422).SendString(err.Error())
 	}
 	fmt.Println("user found: ", target)
 
@@ -93,19 +94,25 @@ func (a *Auth) Signup(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).SendString("email is exist, please try another one")
 	}
 
-	a.query.CreateUser(context.Background(), db.CreateUserParams{
+	dbuser, err := a.query.CreateUser(context.Background(), db.CreateUserParams{
 		Email:    req.Email,
 		Password: req.Password,
 	})
+	if err != nil {
+		fmt.Println("db create user failed")
+		// return getErrorRes(c, "no user")
+		return c.Status(http.StatusBadRequest).SendString(string("error when db create user"))
+	}
 
 	res := signupResponse{
-		Email:   req.Email,
+		Email:   dbuser.Email,
 		Message: "signup success",
 	}
 	resp, err := json.Marshal(res)
 	if err != nil {
 		fmt.Println("err via json Marshal")
 	}
+
 	return c.SendString(string(resp))
 }
 
@@ -119,4 +126,22 @@ func (a *Auth) userExist(email string) bool {
 		return false
 	}
 	return true
+}
+
+func getErrorRes(c *fiber.Ctx, err error, message string) error {
+
+	data := struct {
+		Err    error  `json:"error"`
+		Mesage string `json:"message"`
+	}{}
+	data.Err = err
+	fmt.Println(data)
+	data.Mesage = message
+	d, err := json.Marshal(data)
+	if err != nil {
+		fmt.Println("marshal json error")
+	}
+
+	return c.Status(422).SendString(string(d))
+
 }
