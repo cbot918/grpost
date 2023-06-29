@@ -15,8 +15,8 @@ type Author struct {
 }
 
 type User struct {
-	ID       int32
-	Email    sql.NullString
+	ID       int64
+	Email    string
 	Name     sql.NullString
-	Password sql.NullString
+	Password string
 }

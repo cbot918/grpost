@@ -1,6 +1,6 @@
 CREATE TABLE "users" (
-  "id" int PRIMARY KEY,
-  "email" varchar,
+  "id" bigserial PRIMARY KEY,
+  "email" varchar NOT NULL,
   "name" varchar,
-  "password" varchar
+  "password" varchar NOT NULL
 );

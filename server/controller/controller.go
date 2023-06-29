@@ -1,13 +1,17 @@
 package controller
 
+import db "github.com/cbot918/grpost/db/sqlc"
+
 type Controller struct {
-	Auth *Auth
+	Query *db.Queries
+	Auth  *Auth
 }
 
-func NewController() *Controller {
+func NewController(query *db.Queries) *Controller {
 
 	ctlr := new(Controller)
-	ctlr.Auth = NewAuth()
+	ctlr.Auth = NewAuth(query)
+	ctlr.Query = query
 
 	return ctlr
 }
