@@ -41,12 +41,17 @@ func InsertPostObj(posts []Post) {
 	}
 	var stmt string
 	/* insert posts table*/
-	// stmt = GetCatStmtPosts(posts, "posts")
-	// log(stmt)
-	// execInsert(stmt)
+	stmt = GetCatStmtPosts(posts, "posts")
+	log(stmt)
+	execInsert(stmt)
 
 	/* insert post_like table*/
 	stmt = GetCatStmtPosts(posts, "post_like")
+	log(stmt)
+	execInsert(stmt)
+
+	/* insert comments table*/
+	stmt = GetCatStmtPosts(posts, "comments")
 	log(stmt)
 	execInsert(stmt)
 
@@ -79,6 +84,24 @@ func GetCatStmtPosts(posts []Post, tableType string) (str string) {
 					for _, like := range post.Likes {
 						str += fmt.Sprintf("('%s', '%s'),",
 							util.GetUuidFill(like.Oid, 32),
+							util.GetUuidFill(post.ID.Oid, 32),
+						)
+					}
+				}
+			}
+			str = str[:len(str)-1]
+			str += ";"
+		}
+	case "comments":
+		{
+			str = "INSERT INTO comments (id, texts, posted_by, target_post) VALUES"
+			for _, post := range posts {
+				if len(post.Comments) > 0 {
+					for _, comment := range post.Comments {
+						str += fmt.Sprintf("('%s', '%s', '%s', '%s'),",
+							util.GetUuidFill(comment.ID.Oid, 32),
+							comment.Text,
+							util.GetUuidFill(comment.PostedBy.Oid, 32),
 							util.GetUuidFill(post.ID.Oid, 32),
 						)
 					}

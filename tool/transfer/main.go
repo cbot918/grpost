@@ -12,12 +12,13 @@ const (
 )
 
 func main() {
-	// users := GetStructFromUserJson(jsonUser, []User{})
-	// InsertUserObj(users)
-	// PrintUserJson(users)
+	users := GetStructFromUserJson(jsonUser, []User{})
+	InsertUserObj(users)
 
 	posts := GetStructFromPostJson(jsonPost, []Post{})
 	InsertPostObj(posts)
+
+	// PrintUserJson(users)
 	// PrintPostJson(posts)
 }
 
