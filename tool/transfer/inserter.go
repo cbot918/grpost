@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	mapset "github.com/deckarep/golang-set"
 	"github.com/jmoiron/sqlx"
@@ -16,24 +17,36 @@ const (
 var log = fmt.Println
 var logf = fmt.Printf
 
-func InsertUsers(u *User) sql.Result {
+func InsertUsers(users []User) {
+	if len(users) == 0 {
+		log("no user data, quit program")
+		os.Exit(1)
+	}
+
+	stmt := GetCatStmt(users)
+	log(stmt)
+	insertUser(stmt)
+
+}
+func GetCatStmt(users []User) string {
+	str := "INSERT INTO users (email, name, password, pic) VALUES"
+	for _, item := range users {
+		str += fmt.Sprintf("('%s','%s','%s','%s'),", item.Email, item.Name, item.Password, item.Pic)
+	}
+	str = str[:len(str)-1]
+	str += ";"
+	return str
+}
+
+func insertUser(stmt string) sql.Result {
 	db := setupDb(DB_URL)
 	err := db.Ping()
 	if err != nil {
 		fmt.Println("ping failed")
 	}
 
-	var GetMulInsStmt = func() string {
-		var temp string
-
-		return temp
-	}
-	GetMulInsStmt()
-
 	// stage1
-	// "INSERT INTO person (first_name, last_name, email) VALUES ($1, $2, $3)", "Jason", "Moiron", "jmoiron@jmoiron.net"
-	stmt := "INSERT INTO users (email, name, password, pic) VALUES($1, $2, $3, $4)"
-	res, err := db.Exec(stmt, u.Email, u.Name, u.Password, u.Pic)
+	res, err := db.Exec(stmt)
 	if err != nil {
 		log("insert exec failed")
 		panic(err)
