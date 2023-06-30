@@ -8,9 +8,11 @@ type User struct {
 	Followers []struct {
 		Oid string `json:"$oid"`
 	} `json:"followers"`
-	Following []any  `json:"following"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	Name      string `json:"name"`
-	V         int    `json:"__v"`
+	Following []struct {
+		Oid string `json:"$oid"`
+	} `json:"following"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
+	V        int    `json:"__v"`
 }
