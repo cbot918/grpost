@@ -11,7 +11,7 @@ const jsonc = "users.json"
 func main() {
 
 	users := GetStructFromJson(jsonc, []User{})
-	InsertUsers(users)
+	InsertUserObj(users)
 	// PrintJson(s)
 	// log(s)
 }

@@ -3,8 +3,6 @@
     "_id": { "$oid": "60cca0236684bf1e5c6f0686" },
     "pic": "https://res.cloudinary.com/yalecloud/image/upload/v1623929382/noimage_jlfaqb.jpg",
     "followers": [
-      { "$oid": "60e2ad5da6d3660022f035e9" },
-      { "$oid": "60e2ad5da6d3660022f035e9" },
       { "$oid": "60e2ad5da6d3660022f035e9" }
     ],
     "following": [],
@@ -17,8 +15,6 @@
     "_id": { "$oid": "60cca0236684bf1e5c6f0686" },
     "pic": "https://res.cloudinary.com/yalecloud/image/upload/v1623929382/noimage_jlfaqb.jpg",
     "followers": [
-      { "$oid": "60e2ad5da6d3660022f035e9" },
-      { "$oid": "60e2ad5da6d3660022f035e9" },
       { "$oid": "60e2ad5da6d3660022f035e9" }
     ],
     "following": [],
@@ -164,8 +160,6 @@
     "pic": "http://res.cloudinary.com/yalecloud/image/upload/v1625468251/vnzon1hdazxp9muhyfj1.jpg",
     "followers": [],
     "following": [
-      { "$oid": "60cca0236684bf1e5c6f0686" },
-      { "$oid": "60cca0236684bf1e5c6f0686" },
       { "$oid": "60cca0236684bf1e5c6f0686" }
     ],
     "email": "456@gmail.com",

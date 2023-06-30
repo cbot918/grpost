@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	mapset "github.com/deckarep/golang-set"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -17,25 +16,53 @@ const (
 var log = fmt.Println
 var logf = fmt.Printf
 
-func InsertUsers(users []User) {
+func InsertUserObj(users []User) {
 	if len(users) == 0 {
 		log("no user data, quit program")
 		os.Exit(1)
 	}
 
-	stmt := GetCatStmt(users)
+	var stmt string
+	// stmt = GetCatStmt(users, "users")
+	// log(stmt)
+	// insertUser(stmt)
+
+	stmt = GetCatStmt(users, "follow")
 	log(stmt)
 	insertUser(stmt)
 
 }
-func GetCatStmt(users []User) string {
-	str := "INSERT INTO users (email, name, password, pic) VALUES"
-	for _, item := range users {
-		str += fmt.Sprintf("('%s','%s','%s','%s'),", item.Email, item.Name, item.Password, item.Pic)
+func GetCatStmt(users []User, tableType string) (str string) {
+	switch tableType {
+	case "users":
+		{
+			str = "INSERT INTO users (email, name, password, pic) VALUES"
+			for _, item := range users {
+				str += fmt.Sprintf("('%s','%s','%s','%s'),", item.Email, item.Name, item.Password, item.Pic)
+			}
+			str = str[:len(str)-1]
+			str += ";"
+		}
+	case "follow":
+		{
+			str = "INSERT INTO follow (from_user,to_user) VALUES"
+			for _, user := range users {
+				if len(user.Followers) > 0 {
+					for _, follower := range user.Followers {
+						str += fmt.Sprintf("('%s','%s'),", user.ID, follower.Oid)
+					}
+				}
+				if len(user.Following) > 0 {
+					for _, following := range user.Following {
+						str += fmt.Sprintf("('%s','%s'),", following.Oid, user.ID)
+					}
+				}
+			}
+			str = str[:len(str)-1]
+			str += ";"
+		}
 	}
-	str = str[:len(str)-1]
-	str += ";"
-	return str
+	return
 }
 
 func insertUser(stmt string) sql.Result {
@@ -68,14 +95,14 @@ func insertUser(stmt string) sql.Result {
 	return res
 }
 
-func ReduceDup(t *User) string {
-	set := mapset.NewSet()
-	for _, item := range t.Followers {
-		set.Add(item.Oid)
-	}
-	g := set.ToSlice()
-	return g[0].(string)
-}
+// func ReduceDup(t User) string {
+// 	set := mapset.NewSet()
+// 	for _, item := range t.Followers {
+// 		set.Add(item.Oid)
+// 	}
+// 	g := set.ToSlice()
+// 	return g[0].(string)
+// }
 
 func HaveFollower(target *User) bool {
 	return len(target.Followers) > 0
