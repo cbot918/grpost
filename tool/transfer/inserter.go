@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cbot918/liby/util"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -27,9 +28,9 @@ func InsertUserObj(users []User) {
 	// log(stmt)
 	// insertUser(stmt)
 
-	stmt = GetCatStmt(users, "follow")
+	stmt = GetCatStmt(users, "uuid")
 	log(stmt)
-	insertUser(stmt)
+	// insertUser(stmt)
 
 }
 func GetCatStmt(users []User, tableType string) (str string) {
@@ -60,6 +61,14 @@ func GetCatStmt(users []User, tableType string) (str string) {
 			}
 			str = str[:len(str)-1]
 			str += ";"
+		}
+	case "uuid":
+		{
+			u := "1476142dea1a4fd6b23b92bb907"
+			log(
+				util.GetUuidFill(u, 32),
+			)
+
 		}
 	}
 	return
