@@ -22,18 +22,54 @@ func InsertUserObj(users []User) {
 		log("no user data, quit program")
 		os.Exit(1)
 	}
-
 	var stmt string
+	/* insert users table*/
+	stmt = GetCatStmt(users, "users")
+	log(stmt)
+	execInsert(stmt)
 
-	// stmt = GetCatStmt(users, "users")
-	// log(stmt)
-	// insertUser(stmt)
-
+	/* insert follow table */
 	stmt = GetCatStmt(users, "follow")
 	log(stmt)
-	insertUser(stmt)
+	execInsert(stmt)
+}
+
+func InsertPostObj(posts []Post) {
+	if len(posts) == 0 {
+		log("no user data, quit program")
+		os.Exit(1)
+	}
+	var stmt string
+	/* insert posts table*/
+	stmt = GetCatStmtPosts(posts, "posts")
+	log(stmt)
+	execInsert(stmt)
 
 }
+
+func GetCatStmtPosts(posts []Post, tableType string) (str string) {
+	switch tableType {
+	case "posts":
+		{
+			str = "INSERT INTO posts (id, title, body, posted_by, photo, created_at, updated_at) VALUES"
+			for _, post := range posts {
+				str += fmt.Sprintf("('%s', '%s', '%s', '%s', '%s', '%s','%s'),",
+					util.GetUuidFill(post.ID.Oid, 32),
+					post.Title,
+					post.Body,
+					util.GetUuidFill(post.PostedBy.Oid, 32),
+					post.Photo,
+					util.GetParsedTime(post.CreatedAt.Date.String()),
+					util.GetParsedTime(post.UpdatedAt.Date.String()),
+				)
+			}
+			str = str[:len(str)-1]
+			str += ";"
+		}
+	}
+	return
+}
+
 func GetCatStmt(users []User, tableType string) (str string) {
 	switch tableType {
 	case "users":
@@ -63,19 +99,11 @@ func GetCatStmt(users []User, tableType string) (str string) {
 			str = str[:len(str)-1]
 			str += ";"
 		}
-	case "uuid":
-		{
-			u := "1476142dea1a4fd6b23b92bb907"
-			log(
-				util.GetUuidFill(u, 32),
-			)
-
-		}
 	}
 	return
 }
 
-func insertUser(stmt string) sql.Result {
+func execInsert(stmt string) sql.Result {
 	db := setupDb(DB_URL)
 	err := db.Ping()
 	if err != nil {
@@ -89,19 +117,6 @@ func insertUser(stmt string) sql.Result {
 		panic(err)
 	}
 	log("insert stage1 success")
-
-	// // stage2
-	// if HaveFollower(u) {
-	// 	followers := ReduceDup(u)
-	// 	log(followers)
-	// 	stmt = "INSERT INTO follow (from_user,to_user) VALUES ($1,$2)"
-	// 	_, err = db.Exec(stmt, u.ID, followers)
-	// 	if err != nil {
-	// 		log("insert follow table failed")
-	// 	}
-	// }
-
-	// PrintJson(u)
 	return res
 }
 

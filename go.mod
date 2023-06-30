@@ -42,7 +42,7 @@ require (
 )
 
 require (
-	github.com/cbot918/liby v1.1.7
+	github.com/cbot918/liby v1.1.9
 	github.com/gofiber/fiber/v2 v2.47.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9

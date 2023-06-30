@@ -6,26 +6,30 @@ import (
 	"os"
 )
 
-const jsonc = "users.json"
+const (
+	jsonUser = "users.json"
+	jsonPost = "posts.json"
+)
 
 func main() {
-
-	users := GetStructFromJson(jsonc, []User{})
+	users := GetStructFromUserJson(jsonUser, []User{})
 	InsertUserObj(users)
-	// PrintJson(s)
-	// log(s)
+	// PrintUserJson(users)
+
+	posts := GetStructFromPostJson(jsonPost, []Post{})
+	InsertPostObj(posts)
+	// PrintPostJson(posts)
 }
 
-func GetStructFromJson(file string, tstruct []User) []User {
+func GetStructFromUserJson(file string, tstruct []User) []User {
 	content, err := os.ReadFile(file)
 	if err != nil {
 		fmt.Println("read file failed")
 		panic(err)
 	}
-	return marshaler(content, tstruct)
+	return userMarshaler(content, tstruct)
 }
-
-func marshaler(content []byte, target []User) []User {
+func userMarshaler(content []byte, target []User) []User {
 	err := json.Unmarshal(content, &target)
 	if err != nil {
 		fmt.Println("json unmarshal error")
@@ -33,8 +37,31 @@ func marshaler(content []byte, target []User) []User {
 	}
 	return target
 }
+func PrintUserJson(target []User) {
+	jsonData, err := json.MarshalIndent(target, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s\n", jsonData)
+}
 
-func PrintJson(target []User) {
+func GetStructFromPostJson(file string, tstruct []Post) []Post {
+	content, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Println("read file failed")
+		panic(err)
+	}
+	return postMarshaler(content, tstruct)
+}
+func postMarshaler(content []byte, target []Post) []Post {
+	err := json.Unmarshal(content, &target)
+	if err != nil {
+		fmt.Println("json unmarshal error")
+		panic(err)
+	}
+	return target
+}
+func PrintPostJson(target []Post) {
 	jsonData, err := json.MarshalIndent(target, "", "    ")
 	if err != nil {
 		panic(err)
