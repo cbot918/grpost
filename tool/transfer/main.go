@@ -6,29 +6,33 @@ import (
 	"os"
 )
 
-const file = "post.json"
+const jsonc = "user.json"
 
 func main() {
-	PrintStruct(file)
+	s := GetStructFromJson(jsonc, &User{})
+	// InsertUsers(s)
+	PrintJson(s)
 }
 
-func PrintStruct(file string) {
+func GetStructFromJson(file string, tstruct *User) *User {
 	content, err := os.ReadFile(file)
 	if err != nil {
 		fmt.Println("read file failed")
 		panic(err)
 	}
-	// fmt.Println(string(content))
-	p := &Post{}
-	err = json.Unmarshal(content, &p)
+	return marshaler(content, tstruct)
+}
+
+func marshaler(content []byte, target *User) *User {
+	err := json.Unmarshal(content, &target)
 	if err != nil {
 		fmt.Println("json unmarshal error")
 		panic(err)
 	}
-	printJson(p)
+	return target
 }
 
-func printJson(target interface{}) {
+func PrintJson(target *User) {
 	jsonData, err := json.MarshalIndent(target, "", "    ")
 	if err != nil {
 		panic(err)

@@ -8,8 +8,8 @@ CREATE TABLE "users" (
 
 CREATE TABLE "follow" (
   "id" bigserial PRIMARY KEY,
-  "from_user" bigserial NOT NULL,
-  "to_user" bigserial NOT NULL
+  "from_user" bigint NOT NULL,
+  "to_user" bigint NOT NULL
 );
 
 CREATE TABLE "posts" (
