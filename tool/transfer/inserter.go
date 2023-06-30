@@ -24,22 +24,23 @@ func InsertUserObj(users []User) {
 	}
 
 	var stmt string
+
 	// stmt = GetCatStmt(users, "users")
 	// log(stmt)
 	// insertUser(stmt)
 
-	stmt = GetCatStmt(users, "uuid")
+	stmt = GetCatStmt(users, "follow")
 	log(stmt)
-	// insertUser(stmt)
+	insertUser(stmt)
 
 }
 func GetCatStmt(users []User, tableType string) (str string) {
 	switch tableType {
 	case "users":
 		{
-			str = "INSERT INTO users (email, name, password, pic) VALUES"
-			for _, item := range users {
-				str += fmt.Sprintf("('%s','%s','%s','%s'),", item.Email, item.Name, item.Password, item.Pic)
+			str = "INSERT INTO users (id, email, name, password, pic) VALUES"
+			for _, user := range users {
+				str += fmt.Sprintf("('%s','%s','%s','%s','%s'),", util.GetUuidFill(user.ID.Oid, 32), user.Email, user.Name, user.Password, user.Pic)
 			}
 			str = str[:len(str)-1]
 			str += ";"
@@ -50,12 +51,12 @@ func GetCatStmt(users []User, tableType string) (str string) {
 			for _, user := range users {
 				if len(user.Followers) > 0 {
 					for _, follower := range user.Followers {
-						str += fmt.Sprintf("('%s','%s'),", user.ID, follower.Oid)
+						str += fmt.Sprintf("('%s','%s'),", util.GetUuidFill(user.ID.Oid, 32), util.GetUuidFill(follower.Oid, 32))
 					}
 				}
 				if len(user.Following) > 0 {
 					for _, following := range user.Following {
-						str += fmt.Sprintf("('%s','%s'),", following.Oid, user.ID)
+						str += fmt.Sprintf("('%s','%s'),", util.GetUuidFill(following.Oid, 32), util.GetUuidFill(user.ID.Oid, 32))
 					}
 				}
 			}
