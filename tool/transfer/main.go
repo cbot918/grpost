@@ -12,8 +12,8 @@ const (
 )
 
 func main() {
-	users := GetStructFromUserJson(jsonUser, []User{})
-	InsertUserObj(users)
+	// users := GetStructFromUserJson(jsonUser, []User{})
+	// InsertUserObj(users)
 	// PrintUserJson(users)
 
 	posts := GetStructFromPostJson(jsonPost, []Post{})

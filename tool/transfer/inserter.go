@@ -41,7 +41,12 @@ func InsertPostObj(posts []Post) {
 	}
 	var stmt string
 	/* insert posts table*/
-	stmt = GetCatStmtPosts(posts, "posts")
+	// stmt = GetCatStmtPosts(posts, "posts")
+	// log(stmt)
+	// execInsert(stmt)
+
+	/* insert post_like table*/
+	stmt = GetCatStmtPosts(posts, "post_like")
 	log(stmt)
 	execInsert(stmt)
 
@@ -62,6 +67,22 @@ func GetCatStmtPosts(posts []Post, tableType string) (str string) {
 					util.GetParsedTime(post.CreatedAt.Date.String()),
 					util.GetParsedTime(post.UpdatedAt.Date.String()),
 				)
+			}
+			str = str[:len(str)-1]
+			str += ";"
+		}
+	case "post_like":
+		{
+			str = "INSERT INTO post_like (liked_user, target_post) VALUES"
+			for _, post := range posts {
+				if len(post.Likes) > 0 {
+					for _, like := range post.Likes {
+						str += fmt.Sprintf("('%s', '%s'),",
+							util.GetUuidFill(like.Oid, 32),
+							util.GetUuidFill(post.ID.Oid, 32),
+						)
+					}
+				}
 			}
 			str = str[:len(str)-1]
 			str += ";"
