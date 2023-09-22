@@ -12,8 +12,8 @@ const Home = ()=>{
             }
         }).then(res=>res.json())
         .then(result=>{
-            // console.log(result)
-            setData(result.posts)  
+            console.log(result)
+            setData(result)  
         })
     },[])
 
@@ -123,9 +123,9 @@ const Home = ()=>{
                         <div className="card home-card" key={item._id}>
                           
                             <h5 style={{padding:"5px"}} >
-                              <Link to={item.postedBy._id !== state._id?"/profile/"+item.postedBy._id:"/profile"}>{item.postedBy.name}</Link> 
+                              <Link to={item.PostedBy._id !== state._id?"/profile/"+item.PostedBy._id:"/profile"}>{item.PostedBy.name}</Link> 
                               
-                              {item.postedBy._id == state._id && 
+                              {item.PostedBy._id == state._id && 
                             <i 
                               className="material-icons" 
                               style={{float:"right"}}
@@ -164,7 +164,7 @@ const Home = ()=>{
                                 {
                                     item.comments.map(record=>{
                                         return(
-                                            <h6 key={record._id}><span style={{fontWeight:"500"}}>{record.postedBy.name}</span>{record.text}</h6>
+                                            <h6 key={record._id}><span style={{fontWeight:"500"}}>{record.PostedBy.name}</span>{record.text}</h6>
                                         )
                                     })
                                 }

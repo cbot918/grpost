@@ -1,0 +1,14 @@
+{
+  "likes": [],
+  "_id": "64208a79-b4cb-dc00-1e06-4a1a00000000",
+  "title": "蟲蟲剋星",
+  "body": "想起有個BUG放了一年好像還是不會解 :D",
+  "photo": "http://res.cloudinary.com/yalecloud/image/upload/v1679854200/ktnlvnns4zat4lv8wakk.png",
+  "PostedBy": {
+    "_id": "user123",
+    "name": "yale mock"
+  },
+  "comments": [],
+  "createdAt": "2023-03-26 18:10:01.65 +0000 UTC",
+  "updatedAt": "2023-03-29 15:41:15.26 +0000 UTC"
+}

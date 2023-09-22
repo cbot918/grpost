@@ -1,0 +1,48 @@
+{
+  "likes": [],
+  "_id": "64208a79b4cbdc001e064a1a",
+  "title": "蟲蟲剋星",
+  "body": "想起有個BUG放了一年好像還是不會解 :D",
+  "photo": "http://res.cloudinary.com/yalecloud/image/upload/v1679854200/ktnlvnns4zat4lv8wakk.png",
+  "postedBy": {
+      "_id": "60ccae67fcd2c7329ca396c0",
+      "name": "yale918"
+  },
+  "comments": [
+      {
+          "_id": "64245c1bc716a905545b7768",
+          "text": "123",
+          "postedBy": {
+              "_id": "60ccae67fcd2c7329ca396c0",
+              "name": "yale918"
+          }
+      },
+      {
+          "_id": "64e0d694d8dd03001518eec7",
+          "text": "簽",
+          "postedBy": {
+              "_id": "64e0d640d8dd03001518eea7",
+              "name": "James123"
+          }
+      },
+      {
+          "_id": "64e0d697d8dd03001518eecb",
+          "text": "簽",
+          "postedBy": {
+              "_id": "64e0d640d8dd03001518eea7",
+              "name": "James123"
+          }
+      },
+      {
+          "_id": "64e0d8e9d8dd03001518eed3",
+          "text": " 簽",
+          "postedBy": {
+              "_id": "60ccae67fcd2c7329ca396c0",
+              "name": "yale918"
+          }
+      }
+  ],
+  "createdAt": "2023-03-26T18:10:01.658Z",
+  "updatedAt": "2023-08-19T15:00:15.458Z",
+  "__v": 0
+}
