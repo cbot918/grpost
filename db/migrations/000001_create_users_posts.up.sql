@@ -19,7 +19,8 @@ CREATE TABLE "posts" (
   "posted_by" uuid NOT NULL,
   "photo" varchar NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
-  "updated_at" timestamptz
+  "updated_at" timestamptz,
+  "user_name" varchar NOT NULL
 );
 
 CREATE TABLE "post_like" (

@@ -10,7 +10,7 @@ import (
 )
 
 const getPosts = `-- name: GetPosts :many
-SELECT id, title, body, posted_by, photo, created_at, updated_at FROM posts
+SELECT id, title, body, posted_by, photo, created_at, updated_at, user_name FROM posts
 `
 
 func (q *Queries) GetPosts(ctx context.Context) ([]Post, error) {
@@ -30,6 +30,7 @@ func (q *Queries) GetPosts(ctx context.Context) ([]Post, error) {
 			&i.Photo,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.UserName,
 		); err != nil {
 			return nil, err
 		}

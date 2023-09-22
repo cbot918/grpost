@@ -38,6 +38,7 @@ type Post struct {
 	Photo     string
 	CreatedAt time.Time
 	UpdatedAt sql.NullTime
+	UserName  string
 }
 
 type PostLike struct {

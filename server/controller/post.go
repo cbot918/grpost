@@ -75,34 +75,13 @@ func (p *Post) AllPost(c *fiber.Ctx) error {
 	posts, err := p.query.GetPosts(context.Background())
 	if err != nil {
 		fmt.Println("posts not found")
+		fmt.Println(err)
 		return c.Status(422).SendString(string("query posts failed"))
 	}
 	fmt.Println("posts : ", posts)
 
 	fn := posts[49]
 	fmt.Println(fn.ID)
-
-	// mockpost := postReqponse{
-	// 	Id:        string(fn.ID.String()),
-	// 	Title:     fn.Title,
-	// 	Body:      fn.Body,
-	// 	Comments:  []string{},
-	// 	CreatedAt: fn.CreatedAt.String(),
-	// 	Likes:     []string{},
-	// 	Photo:     fn.Photo,
-	// 	PostedBy: struct {
-	// 		Id   string `json:"_id"`
-	// 		Name string `json:"name"`
-	// 	}{
-	// 		Id:   "user123",
-	// 		Name: "yale mock",
-	// 	},
-	// 	UpdatedAt: fn.UpdatedAt.Time.String(),
-	// }
-
-	// mockposts := []postReqponse{}
-
-	// mockposts = append(mockposts, mockpost)
 
 	return c.JSON(p.postWrapper(posts))
 }
@@ -123,8 +102,8 @@ func (p *Post) postWrapper(posts []db.Post) (resp []postReqponse) {
 				Id   string `json:"_id"`
 				Name string `json:"name"`
 			}{
-				Id:   "user123",
-				Name: "yale mock",
+				Id:   item.PostedBy.String(),
+				Name: item.UserName,
 			},
 			UpdatedAt: item.UpdatedAt.Time.String(),
 		}
