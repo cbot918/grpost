@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -16,13 +15,13 @@ INSERT INTO users (
 ) VALUES (
   $1, $2, $3
 )
-RETURNING id, email, name, password
+RETURNING id, email, name, password, pic
 `
 
 type CreateUserParams struct {
 	Email    string
 	Password string
-	Name     sql.NullString
+	Name     string
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -33,12 +32,13 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Email,
 		&i.Name,
 		&i.Password,
+		&i.Pic,
 	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, email, name, password FROM users
+SELECT id, email, name, password, pic FROM users
 WHERE email = $1 LIMIT 1
 `
 
@@ -50,12 +50,13 @@ func (q *Queries) GetUser(ctx context.Context, email string) (User, error) {
 		&i.Email,
 		&i.Name,
 		&i.Password,
+		&i.Pic,
 	)
 	return i, err
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, email, name, password FROM users
+SELECT id, email, name, password, pic FROM users
 ORDER BY name
 `
 
@@ -73,6 +74,7 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 			&i.Email,
 			&i.Name,
 			&i.Password,
+			&i.Pic,
 		); err != nil {
 			return nil, err
 		}

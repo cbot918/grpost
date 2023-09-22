@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/cbot918/grpost/server"
@@ -34,13 +33,13 @@ func main() {
 	// db setup
 	db := util.GetQueryInstance("postgres", cfg.DSN)
 
-	ctx := context.Background()
-	user, err := db.ListUsers(ctx)
-	if err != nil {
-		fmt.Println("query user failed")
-		panic(err)
-	}
-	fmt.Println(user)
+	// ctx := context.Background()
+	// user, err := db.ListUsers(ctx)
+	// if err != nil {
+	// 	fmt.Println("query user failed")
+	// 	panic(err)
+	// }
+	// fmt.Println(user)
 
 	// server listen
 	grpost := server.New(cfg.UI_PATH, db)

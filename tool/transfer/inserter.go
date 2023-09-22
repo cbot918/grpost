@@ -32,6 +32,7 @@ func InsertUserObj(users []User) {
 	stmt = GetCatStmt(users, "follow")
 	log(stmt)
 	execInsert(stmt)
+	log("insert complete")
 }
 
 func InsertPostObj(posts []Post) {

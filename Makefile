@@ -1,4 +1,8 @@
 DB_URL=postgres://postgres:12345@localhost:5432/grpost?sslmode=disable
+ARG=create
+
+sqlc:
+	sqlc generate
 
 run: build-ui
 	go run .

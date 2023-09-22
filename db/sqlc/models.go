@@ -6,17 +6,50 @@ package db
 
 import (
 	"database/sql"
+	"time"
+
+	"github.com/google/uuid"
 )
 
-type Author struct {
-	ID   int64
-	Name string
-	Bio  sql.NullString
+type Comment struct {
+	ID         uuid.UUID
+	Texts      string
+	PostedBy   uuid.UUID
+	TargetPost uuid.UUID
+}
+
+type CommentLike struct {
+	ID            int64
+	LikedUser     uuid.UUID
+	TargetComment uuid.UUID
+}
+
+type Follow struct {
+	ID       int64
+	FromUser uuid.UUID
+	ToUser   uuid.UUID
+}
+
+type Post struct {
+	ID        uuid.UUID
+	Title     string
+	Body      string
+	PostedBy  uuid.UUID
+	Photo     string
+	CreatedAt time.Time
+	UpdatedAt sql.NullTime
+}
+
+type PostLike struct {
+	ID         int64
+	LikedUser  uuid.UUID
+	TargetPost uuid.UUID
 }
 
 type User struct {
-	ID       int64
+	ID       uuid.UUID
 	Email    string
-	Name     sql.NullString
+	Name     string
 	Password string
+	Pic      string
 }
