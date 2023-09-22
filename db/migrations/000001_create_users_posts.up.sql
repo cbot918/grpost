@@ -33,7 +33,8 @@ CREATE TABLE "comments" (
   "id" uuid PRIMARY KEY,
   "texts" varchar NOT NULL,
   "posted_by" uuid NOT NULL,
-  "target_post" uuid NOT NULL
+  "target_post" uuid NOT NULL,
+  "user_name" varchar NOT NULL
 );
 
 CREATE TABLE "comment_like" (

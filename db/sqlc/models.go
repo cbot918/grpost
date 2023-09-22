@@ -16,6 +16,7 @@ type Comment struct {
 	Texts      string
 	PostedBy   uuid.UUID
 	TargetPost uuid.UUID
+	UserName   string
 }
 
 type CommentLike struct {

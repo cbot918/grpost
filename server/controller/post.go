@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	db "github.com/cbot918/grpost/db/sqlc"
@@ -55,14 +56,23 @@ likes:
 
 */
 
+type Comment struct {
+	Id       string `json:"_id"`
+	Text     string `json:"text"`
+	PostedBy struct {
+		Id   string `json:"_id"`
+		Name string `json:"name"`
+	}
+}
+
 type postResponse struct {
-	Id        string   `json:"_id"`
-	Title     string   `json:"title"`
-	Body      string   `json:"body"`
-	Comments  []string `json:"comments"`
-	CreatedAt string   `json:"createdAt"`
-	Likes     []string `json:"likes"`
-	Photo     string   `json:"photo"`
+	Id        string    `json:"_id"`
+	Title     string    `json:"title"`
+	Body      string    `json:"body"`
+	Comments  []Comment `json:"comments"`
+	CreatedAt string    `json:"createdAt"`
+	Likes     []string  `json:"likes"`
+	Photo     string    `json:"photo"`
 	PostedBy  struct {
 		Id   string `json:"_id"`
 		Name string `json:"name"`
@@ -80,12 +90,28 @@ func (p *Post) AllPost(c *fiber.Ctx) error {
 	}
 	fmt.Println("posts : ", posts)
 
-	fn := posts[49]
-	fmt.Println(fn.ID)
+	comments, err := p.query.GetComments(context.Background())
+	if err != nil {
+		fmt.Println("comments not found")
+		fmt.Println(err)
+		return c.Status(422).SendString(string("query comments failed"))
+	}
 
-	return c.JSON(p.postWrapper(posts))
+	likes, err := p.query.GetLikes(context.Background())
+	if err != nil {
+		fmt.Println("likes not found")
+		fmt.Println(err)
+		return c.Status(422).SendString(string("query likes failed"))
+	}
+
+	result := p.postWrapper(posts)
+
+	result = p.commentWrapper(comments, result)
+
+	p.likeWrapper(likes, result)
+
+	return c.JSON(result)
 }
-
 func (p *Post) postWrapper(posts []db.Post) (resp []postResponse) {
 
 	for _, item := range posts {
@@ -94,7 +120,7 @@ func (p *Post) postWrapper(posts []db.Post) (resp []postResponse) {
 			Id:        string(item.ID.String()),
 			Title:     item.Title,
 			Body:      item.Body,
-			Comments:  []string{},
+			Comments:  []Comment{},
 			CreatedAt: item.CreatedAt.String(),
 			Likes:     []string{},
 			Photo:     item.Photo,
@@ -111,4 +137,68 @@ func (p *Post) postWrapper(posts []db.Post) (resp []postResponse) {
 		resp = append(resp, fixedPost)
 	}
 	return
+}
+
+func (p *Post) commentWrapper(comments []db.GetCommentsRow, posts []postResponse) []postResponse {
+
+	for _, c := range comments {
+		for i := range posts {
+
+			if posts[i].Id == c.TargetPost.String() {
+				comment := Comment{
+					Id:   c.ID.String(),
+					Text: c.Texts,
+					PostedBy: struct {
+						Id   string `json:"_id"`
+						Name string `json:"name"`
+					}{
+						Id:   c.PostedBy.String(),
+						Name: c.UserName,
+					},
+				}
+
+				posts[i].Comments = append(posts[i].Comments, comment)
+			}
+
+		}
+	}
+	return posts
+}
+
+func lj(v any) {
+	res, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+
+	}
+	fmt.Println(string(res))
+}
+
+func (p *Post) likeWrapper(likes []db.PostLike, posts []postResponse) (updatedPosts []postResponse) {
+
+	hashedPosts := make(map[string]postResponse)
+
+	for _, post := range posts {
+		hashedPosts[post.Id] = post
+	}
+
+	for _, like := range likes {
+		if post, exists := hashedPosts[like.TargetPost.String()]; exists {
+			fmt.Println(like.TargetPost.String())
+
+			post.Likes = append(post.Likes, like.TargetPost.String())
+
+			hashedPosts[like.TargetPost.String()] = post // Update the struct in the map
+
+		}
+	}
+
+	lj(hashedPosts[like.TargetPost.String()])
+
+	// for _, post := range hashedPosts {
+	// 	updatedPosts = append(updatedPosts, post)
+	// }
+
+	fmt.Printf("%#+v", updatedPosts)
+
+	return updatedPosts
 }
