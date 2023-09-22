@@ -108,7 +108,7 @@ func (p *Post) AllPost(c *fiber.Ctx) error {
 
 	result = p.commentWrapper(comments, result)
 
-	p.likeWrapper(likes, result)
+	result = p.likeWrapper(likes, result)
 
 	return c.JSON(result)
 }
@@ -192,11 +192,14 @@ func (p *Post) likeWrapper(likes []db.PostLike, posts []postResponse) (updatedPo
 		}
 	}
 
-	lj(hashedPosts[like.TargetPost.String()])
-
-	// for _, post := range hashedPosts {
-	// 	updatedPosts = append(updatedPosts, post)
-	// }
+	for _, post := range hashedPosts {
+		// if post.Id == "60ccb056-8e68-9018-44d0-929300000000" {
+		// 	lj(post)
+		// 	fmt.Println("gotch")
+		// 	return nil
+		// }
+		updatedPosts = append(updatedPosts, post)
+	}
 
 	fmt.Printf("%#+v", updatedPosts)
 
