@@ -55,7 +55,7 @@ likes:
 
 */
 
-type postReqponse struct {
+type postResponse struct {
 	Id        string   `json:"_id"`
 	Title     string   `json:"title"`
 	Body      string   `json:"body"`
@@ -86,11 +86,11 @@ func (p *Post) AllPost(c *fiber.Ctx) error {
 	return c.JSON(p.postWrapper(posts))
 }
 
-func (p *Post) postWrapper(posts []db.Post) (resp []postReqponse) {
+func (p *Post) postWrapper(posts []db.Post) (resp []postResponse) {
 
 	for _, item := range posts {
 
-		fixedPost := postReqponse{
+		fixedPost := postResponse{
 			Id:        string(item.ID.String()),
 			Title:     item.Title,
 			Body:      item.Body,
